@@ -25,13 +25,26 @@ namespace CriadoresCaes_tA_B {
 
       // This method gets called by the runtime. Use this method to add services to the container.
       public void ConfigureServices(IServiceCollection services) {
-         services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlServer(
-                 Configuration.GetConnectionString("DefaultConnection")));
+
+         // uso de vars. de sessão
+         services.AddDistributedMemoryCache();
+         services.AddSession(options => {
+            options.IdleTimeout = TimeSpan.FromSeconds(100);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+         });
+
+         // definir qual a classe que representa a Base de Dados
+         // e especifica qual o motor (engine) que manipula a base de dados
+         // Especifica, também, onde está a definição da localização da Base de Dados - ver ficheiro 'appSettings.json'
+         services.AddDbContext<CriadoresCaesDB>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
          services.AddDatabaseDeveloperPageExceptionFilter();
 
          services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-             .AddEntityFrameworkStores<ApplicationDbContext>();
+             .AddEntityFrameworkStores<CriadoresCaesDB>();
          services.AddControllersWithViews();
       }
 
@@ -50,6 +63,9 @@ namespace CriadoresCaes_tA_B {
          app.UseStaticFiles();
 
          app.UseRouting();
+
+         // permitir o uso de vars. de sessão
+         app.UseSession();
 
          app.UseAuthentication();
          app.UseAuthorization();
