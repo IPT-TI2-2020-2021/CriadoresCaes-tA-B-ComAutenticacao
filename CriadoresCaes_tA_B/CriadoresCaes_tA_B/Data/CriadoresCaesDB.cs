@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace CriadoresCaes_tA_B.Data {
+
+
+
    public class CriadoresCaesDB : IdentityDbContext {
 
 

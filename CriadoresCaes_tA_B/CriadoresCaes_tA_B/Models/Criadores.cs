@@ -68,6 +68,17 @@ namespace CriadoresCaes_tA_B.Models {
                          ErrorMessage = "Só são aceites emails do IPT.")]
       public string Email { get; set; } // ou se escreve o Telemóvel, ou o Email, ou os dois...
 
+
+      //************************************************************************************
+      /// <summary>
+      /// Funciona como Chave Forasteira no relacionamento entre os Criadores
+      /// e a tabela de autenticação
+      /// </summary>
+      public string UserName { get; set; }
+
+      //************************************************************************************
+
+
       // ############################################
 
       /// <summary>
