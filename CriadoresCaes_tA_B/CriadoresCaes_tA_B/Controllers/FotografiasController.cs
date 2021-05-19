@@ -47,6 +47,8 @@ namespace CriadoresCaes_tA_B.Controllers {
       /// Mostra uma lista de imagens dos cães dos criadores
       /// </summary>
       /// <returns></returns>
+      [AllowAnonymous] // anula a necessidade de um utilizador estar autenticado
+                       // para aceder a este método
       public async Task<IActionResult> Index() {
 
          /* criação de uma variável que vai conter um conjunto de dados
@@ -70,14 +72,37 @@ namespace CriadoresCaes_tA_B.Controllers {
          *  |
          *  representa todos registos das fotografias
          */
-         var fotografias = _context.Fotografias
-                                   .Include(f => f.Cao)
-                                   .ThenInclude(c => c.ListaCriadores)
-                                   .ThenInclude(cc => cc.Criador);
-                                  // .Where(cr=>cr.UserName == _userManager.GetUserId(User));
+         //var fotografias = _context.Fotografias
+         //                          .Include(f => f.Cao)
+         //                          .ThenInclude(c => c.ListaCriadores)
+         //                          .ThenInclude(cc => cc.Criador);
+         //                         // .Where(cr=>cr.UserName == _userManager.GetUserId(User));
 
-         // invoca a View, entregando-lhe a lista de registos
-         return View(await fotografias.ToListAsync());
+
+         // dados de todas as fotografias
+         var fotografias = await _context.Fotografias.Include(f => f.Cao).ToListAsync();
+
+         // var. auxiliar
+         string idDaPessoaAutenticada = _userManager.GetUserId(User);
+
+         // quais os cães que pertencem à pessoa que está autenticada?
+         // quais os seus IDs?
+         var caes = await (from c in _context.Caes
+                           join cc in _context.CriadoresCaes on c.Id equals cc.CaoFK
+                           join cr in _context.Criadores on cc.CriadorFK equals cr.Id
+                           where cr.UserName == idDaPessoaAutenticada
+                           select c.Id)
+                          .ToListAsync();
+
+         // transportar os dois objetos para a View
+         // iremos usar um ViewModel
+         var fotos = new FotosCaes {
+            ListaCaes = caes,
+            ListaFotografias = fotografias
+         };
+
+         // invoca a View, entregando-lhe a lista de registos das fotografias e dos cães
+         return View(fotos);
       }
 
 

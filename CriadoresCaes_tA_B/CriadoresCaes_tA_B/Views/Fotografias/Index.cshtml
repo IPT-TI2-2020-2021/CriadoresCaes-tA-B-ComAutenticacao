@@ -1,5 +1,8 @@
-﻿@model IEnumerable<CriadoresCaes_tA_B.Models.Fotografias>
-@* Esta View está a processar uma lista de fotografias que lhe foi enviada pelo Controller *@
+﻿@model CriadoresCaes_tA_B.Models.FotosCaes
+@* Esta View está a processar um ViewModel que contém dois objetos:
+   - a lista de fotografias dos cães
+   - a lista dos IDs dos cães da pessoa autenticada
+*@
 
 
 @{
@@ -8,50 +11,71 @@
 
 <h1>Lista de Fotografias dos Cães</h1>
 
-<p>
-   <a asp-action="Create">Adicionar nova Fotografia</a>
-</p>
+@if (User.Identity.IsAuthenticated) {
+   // este link só vai aparecer ao utilizador se ele estiver autenticado
+   <p>
+      <a asp-action="Create">Adicionar nova Fotografia</a>
+   </p>
+}
 
 <table class="table">
    <thead>
       <tr>
          <th>
             @* vai ao modelo, e mostra o nome do atributo referido *@
-            @Html.DisplayNameFor(model => model.Fotografia)
+            @Html.DisplayNameFor(model => model.ListaFotografias.FirstOrDefault().Fotografia)
          </th>
-         <th>
-            @Html.DisplayNameFor(model => model.DataFoto)
-         </th>
-         <th>
-            @Html.DisplayNameFor(model => model.Cao)
-         </th>
-         <th></th>
+         @if (User.Identity.IsAuthenticated) {
+            <th>
+               @Html.DisplayNameFor(model => model.ListaFotografias.FirstOrDefault().DataFoto)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.ListaFotografias.FirstOrDefault().Cao)
+            </th>
+            <th></th>
+         }
       </tr>
    </thead>
    <tbody>
-      @foreach (var item in Model) {
+      @foreach (var item in Model.ListaFotografias) {
          <tr>
             <td>
                @* invoca o valor existente no Modelo com o conteúdo deste atributo *@
-               
+
                <img src="~/fotos/@Html.DisplayFor(modelItem => item.Fotografia)"
                     width="50"
                     alt="Fotografia do cão @Html.DisplayFor(modelItem => item.Cao.Nome)"
-                    title="@Html.DisplayFor(modelItem => item.Cao.Nome)"/>
+                    title="@Html.DisplayFor(modelItem => item.Cao.Nome)" />
             </td>
-            <td>
-               @Html.DisplayFor(modelItem => item.DataFoto)
-            </td>
-            <td>
-               <a asp-action="Details" asp-controller="Caes" asp-route-id="@item.Cao.Id">
-                  @Html.DisplayFor(modelItem => item.Cao.Nome)
-               </a>
-            </td>
-            <td>
-               <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-               <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-               <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a>
-            </td>
+            @if (User.Identity.IsAuthenticated) {
+               <td>
+                  @Html.DisplayFor(modelItem => item.DataFoto)
+               </td>
+               <td>
+                  @if (Model.ListaCaes.Contains(item.CaoFK)) {
+                     // apenas apresenta o link ao dono do cão
+                     <a asp-action="Details" asp-controller="Caes" asp-route-id="@item.Cao.Id">
+                        @Html.DisplayFor(modelItem => item.Cao.Nome)
+                     </a>
+                  }
+                  else {
+                     @Html.DisplayFor(modelItem => item.Cao.Nome)
+                  }
+               </td>
+               <td>
+                  @if (Model.ListaCaes.Contains(item.CaoFK)) {
+                     // apenas apresenta o link ao dono do cão
+                     <text>
+                        @*esta anotação <text> marca o conteúdo como 'texto'
+                           dessa forma, o Razor irá ignorar o seu conteúdo
+                        *@
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a>
+                     </text>
+                  }
+               </td>
+            }
          </tr>
       }
    </tbody>
