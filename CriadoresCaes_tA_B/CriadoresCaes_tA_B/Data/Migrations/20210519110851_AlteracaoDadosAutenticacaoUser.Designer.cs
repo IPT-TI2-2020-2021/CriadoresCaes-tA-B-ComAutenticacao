@@ -4,14 +4,16 @@ using CriadoresCaes_tA_B.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CriadoresCaes_tA_B.Data.Migrations
 {
     [DbContext(typeof(CriadoresCaesDB))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210519110851_AlteracaoDadosAutenticacaoUser")]
+    partial class AlteracaoDadosAutenticacaoUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

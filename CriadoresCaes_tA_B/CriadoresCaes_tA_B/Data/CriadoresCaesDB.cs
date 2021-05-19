@@ -1,5 +1,6 @@
 ﻿using CriadoresCaes_tA_B.Models;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,8 +11,37 @@ using System.Text;
 namespace CriadoresCaes_tA_B.Data {
 
 
+   /// <summary>
+   /// classe para recolher os dados particulares dos Utilizadores
+   /// vamos deixar de usar o 'IdentityUser' e começar a usar este
+   /// A adição desta classe implica:
+   ///    - mudar a classe de criação da Base de Dados
+   ///    - mudar no ficheiro 'startup.cs' a referência ao tipo do utilizador
+   ///    - mudar em todos os ficheiros do projeto a referência a 'IdentityUser' 
+   ///           para 'ApplicationUser'
+   /// </summary>
+   public class ApplicationUser : IdentityUser {
 
-   public class CriadoresCaesDB : IdentityDbContext {
+      /// <summary>
+      /// recolhe a data de registo de um utilizador
+      /// </summary>
+      public DateTime DataRegisto { get; set; }
+
+      // /// <summary>
+      // /// se fizerem isto, estão a adicionar todos os atributos do 'Criador'
+      // /// à tabela de autenticação
+      // /// </summary>
+      // public Criadores Criador { get; set; }
+   }
+
+
+   /// <summary>
+   /// Criador da base de dados da aplicação
+   /// Além de criar as tabelas do 'negócio'
+   /// também cria as tabelas da Autenticação, mas agora associadas ao novo
+   /// tipo de dados de utilizador
+   /// </summary>
+   public class CriadoresCaesDB : IdentityDbContext<ApplicationUser> {
 
 
       // construtor da classe CriadoresCaesDB
