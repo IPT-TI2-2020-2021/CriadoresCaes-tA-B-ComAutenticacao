@@ -147,6 +147,10 @@ namespace CriadoresCaes_tA_B.Areas.Identity.Pages.Account {
             if (result.Succeeded) {
                _logger.LogInformation("User created a new account with password.");
 
+
+               // se se desejar associar o utilizador recem criado à role 'Criador' 
+               await _userManager.AddToRoleAsync(user, "Criador");
+
                //*************************************************************
                // Vamos proceder à operação de guardar os dados do Criador
                //*************************************************************
@@ -155,7 +159,12 @@ namespace CriadoresCaes_tA_B.Areas.Identity.Pages.Account {
                                                   // a quando da escreita dos dados na interface
                                                   // exatamente a mesma tarefa feita na linha 128
 
-               Input.Criador.UserName = user.Id;
+               Input.Criador.UserName = user.Id;  // adicionar o ID do utilizador,
+                                                  // para formar uma 'ponte' (foreign key) entre
+                                                  // os dados da autenticação e os dados do 'negócio'
+
+               Input.Criador.CodPostal = Input.Criador.CodPostal.ToUpper(); // transformar o CodPostal em maiúsculas
+
 
                // estamos em condições de guardar os dados na BD
                try {

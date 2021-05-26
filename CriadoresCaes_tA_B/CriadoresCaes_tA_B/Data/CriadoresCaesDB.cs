@@ -56,6 +56,14 @@ namespace CriadoresCaes_tA_B.Data {
 
          // insert DB seed
 
+         // dados para definição dos 'Roles'
+         modelBuilder.Entity<IdentityRole>().HasData(
+            new IdentityRole { Id = "c", Name = "Criador", NormalizedName = "CRIADOR" },
+            new IdentityRole { Id = "g", Name = "Gestor", NormalizedName = "GESTOR" }
+            );
+
+
+         // dados para testes durante o desenvolvimento
          modelBuilder.Entity<Racas>().HasData(
             new Racas { Id = 1, Designacao = "Retriever do Labrador" },
             new Racas { Id = 2, Designacao = "Serra da Estrela" },

@@ -45,8 +45,10 @@ namespace CriadoresCaes_tA_B {
 
 
          // deixo de referir 'IdentityUser' e passo a usar 'ApplicationUser'
-         services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-             .AddEntityFrameworkStores<CriadoresCaesDB>();
+         services.AddDefaultIdentity<ApplicationUser>(options =>
+                       options.SignIn.RequireConfirmedAccount = true)
+                              .AddRoles<IdentityRole>()  // ativa o uso de Roles
+                              .AddEntityFrameworkStores<CriadoresCaesDB>();
          services.AddControllersWithViews();
       }
 
