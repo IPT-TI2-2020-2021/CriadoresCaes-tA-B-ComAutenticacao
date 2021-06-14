@@ -32,12 +32,12 @@ namespace CriadoresCaes_tA_B.Controllers {
       /// <summary>
       /// esta variável recolhe os dados da pessoa q se autenticou
       /// </summary>
-      private readonly UserManager<IdentityUser> _userManager;
+      private readonly UserManager<ApplicationUser> _userManager;
 
       public FotografiasController(
          CriadoresCaesDB context,
          IWebHostEnvironment caminho,
-         UserManager<IdentityUser> userManager) {
+         UserManager<ApplicationUser> userManager) {
          _context = context;
          _caminho = caminho;
          _userManager = userManager;
