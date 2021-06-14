@@ -9,6 +9,12 @@ using CriadoresCaes_tA_B.Data;
 using CriadoresCaes_tA_B.Models;
 
 namespace CriadoresCaes_tA_B.Controllers.API {
+
+
+
+   /// <summary>
+   /// Controller API que interage com os dados das Fotografias
+   /// </summary>
    [Route("api/[controller]")]
    [ApiController]
    public class FotografiasAPIController : ControllerBase {

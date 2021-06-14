@@ -3,6 +3,22 @@ using System.Collections.Generic;
 
 namespace CriadoresCaes_tA_B.Models {
 
+   /// <summary>
+   /// lista os dados dos cães a serem disponibilizados na API
+   /// </summary>
+   public class CaesAPIViewModel {
+      /// <summary>
+      /// identificador do Cão
+      /// </summary>
+      public int IdCao { get; set; }
+
+      /// <summary>
+      /// Nome do Cão
+      /// </summary>
+      public string NomeCao { get; set; }
+   }
+
+
 
    /// <summary>
    /// ViewModel para transportar os dados das Fotografias
