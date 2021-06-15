@@ -82,14 +82,33 @@ namespace CriadoresCaes_tA_B.Controllers.API {
          return NoContent();
       }
 
+      /// <summary>
+      /// Endpoint para receber os dados do Formulário de adição de novas fotografias
+      /// </summary>
+      /// <param name="fotografia">dados da nova fotografia</param>
+      /// <param name="UploadFotografia">ficheiro com a imagem da fotografia</param>
+      /// <returns></returns>
       // POST: api/FotografiasAPI
       // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
       [HttpPost]
-      public async Task<ActionResult<Fotografias>> PostFotografias(Fotografias fotografias) {
-         _context.Fotografias.Add(fotografias);
+      public async Task<ActionResult<Fotografias>> PostFotografias([FromForm]Fotografias fotografia, IFormFile UploadFotografia) {
+
+         /* - o anotador [FromForm] instrui a ASP .NET Core a aceitar os dados vindos do formulário do React
+          *   e associá-los ao objeto interno 'fotografia'
+          * 
+          * - o atributo UploadFotografia terá um tratamento 100% igual ao que foi feito no controller das Fotografias
+          */
+
+         // *********************************************************************
+         // esta instrução é apenas usada para não se criar uma exceção no código
+         // deverá ser apagada quando se concretizar o trabalho real
+         fotografia.Fotografia = "";
+         // *********************************************************************
+
+         _context.Fotografias.Add(fotografia);
          await _context.SaveChangesAsync();
 
-         return CreatedAtAction("GetFotografias", new { id = fotografias.Id }, fotografias);
+         return CreatedAtAction("GetFotografias", new { id = fotografia.Id }, fotografia);
       }
 
       // DELETE: api/FotografiasAPI/5
